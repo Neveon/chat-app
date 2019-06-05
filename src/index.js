@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { Route, BrowseRouter as Router } from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 import LoginComponent from './login/login';
 import SignupComponent from './signup/signup';
 import DashboardComponent from './dashboard/dashboard';
@@ -26,8 +26,8 @@ const routing = (
     <Router>
         <div id='routing-container'>
             <Route path='/login' component={LoginComponent}></Route>
-            <Route path='/login' component={SignupComponent}></Route>
-            <Route path='/login' component={DashboardComponent}></Route>
+            <Route path='/signup' component={SignupComponent}></Route>
+            <Route path='/dashboard' component={DashboardComponent}></Route>
         </div>
     </Router>
 );
