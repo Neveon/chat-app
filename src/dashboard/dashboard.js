@@ -2,7 +2,8 @@ import React from 'react';
 import ChatListComponent from '../chatList/chatList';
 import styles from './styles';
 import { Button, withStyles } from '@material-ui/core';
-import ChatViewComponent from '../chatView/chatView';
+import ChatViewComponent from '../chatview/chatView';
+import ChatTextBoxComponent from '../chattextbox/chatTextBox';
 const firebase = require('firebase');
 
 class DashboardComponent extends React.Component {
@@ -37,10 +38,35 @@ class DashboardComponent extends React.Component {
                         user={this.state.email}
                         chat={this.state.chats[this.state.selectedChat]}/>
                 }
+                {
+                    this.state.selectedChat !== null && !this.state.newChatFormVisible ?
+                    <ChatTextBoxComponent submitMessageFn={this.submitMessage}></ChatTextBoxComponent>
+                    : null
+                }
                 <Button className={classes.signOutBtn} onClick={this.signOut}>Sign Out</Button>
             </div>
         );
     }
+
+    submitMessage = (msg) => {
+        const docKey = this.buildDocKey(this.state.chats[this.state.selectedChat].users.filter(_user => _user !== this.state.email)[0]);
+        firebase
+            .firestore()
+            .collection('chats')
+            .doc(docKey)
+            .update({
+                messages: firebase.firestore.FieldValue.arrayUnion({
+                    // Add to array of messages in db
+                    sender: this.state.email,
+                    message: msg,
+                    timestamp: Date.now()
+                }),
+                receiverHasRead: false
+            });
+    }
+
+    // doc key was in alphabetical order as so - user1:user2
+    buildDocKey = (friend) => [this.state.email, friend].sort().join(':');
 
     signOut = () => {
         firebase.auth().signOut();
