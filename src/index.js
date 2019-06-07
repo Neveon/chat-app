@@ -13,13 +13,13 @@ require("firebase/firestore");
 // In a production app, the API information will not be shown here.
 // It will be taken from a databse over an encrypted line such as https
 firebase.initializeApp({
-    apiKey: "AIzaSyA_fQVKTHcb2NyhjhKaHEDw83gRfgIB-sg",
-    authDomain: "im-tutorial-df519.firebaseapp.com",
-    databaseURL: "https://im-tutorial-df519.firebaseio.com",
-    projectId: "im-tutorial-df519",
-    storageBucket: "im-tutorial-df519.appspot.com",
-    messagingSenderId: "331456086232",
-    appId: "1:331456086232:web:48e4fb25ea4293de"
+    apiKey: "TAKEN DOWN",
+    authDomain: "TAKEN DOWN",
+    databaseURL: "TAKEN DOWN",
+    projectId: "TAKEN DOWN",
+    storageBucket: "TAKEN DOWN",
+    messagingSenderId: "TAKEN DOWN",
+    appId: "TAKEN DOWN"
 });
 
 const routing = (
