@@ -34,25 +34,31 @@ class ChatListComponent extends React.Component {
                                     return(
                                         <div key={_index}>
                                             <ListItem onClick={() => this.selectChat(_index)}
-                                            className={classes.listItem}
-                                            selected={this.props.selectedChatIndex === _index}
-                                            alignItems='flex-start'>
-                                                <ListItemAvatar>
-                                                    <Avatar alt='Remy Sharp'>{_chat.users.filter(_user => _user !== this.props.userEmail)[0].split('')[0]}</Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText primary={_chat.users.filter(_user => _user !== this.props.userEmail)[0]}
-                                                    secondary={
-                                                        <React.Fragment>
-                                                            <Typography component='span'
-                                                                color='textPrimary'>
-                                                                {_chat.messages[_chat.messages.length - 1].message.substring(0,30) + '...'}
-                                                            </Typography>
-                                                        </React.Fragment>
-                                                    }>
+                                                className={classes.listItem}
+                                                selected={this.props.selectedChatIndex === _index}
+                                                alignItems='flex-start'>
+                                                    <ListItemAvatar>
+                                                        <Avatar alt='Remy Sharp'>{_chat.users.filter(_user => _user !== this.props.userEmail)[0].split('')[0]}</Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText primary={_chat.users.filter(_user => _user !== this.props.userEmail)[0]}
+                                                        secondary={
+                                                            <React.Fragment>
+                                                                <Typography component='span'
+                                                                    color='textPrimary'>
+                                                                    {_chat.messages[_chat.messages.length - 1].message.substring(0,30) + '...'}
+                                                                </Typography>
+                                                            </React.Fragment>
+                                                        }>
     
-                                                </ListItemText>
-                                        </ListItem>
-                                        <Divider></Divider>
+                                                    </ListItemText>
+                                                {
+                                                    _chat.receiverHasRead === false && !this.userIsSender(_chat) ?
+                                                    <ListItemIcon>
+                                                        <NotificationImportant className={classes.unreadMessage}></NotificationImportant>
+                                                    </ListItemIcon> : null
+                                                }
+                                            </ListItem>
+                                            <Divider></Divider>
                                         </div>
                                     )
                                 })
@@ -83,6 +89,8 @@ class ChatListComponent extends React.Component {
     selectChat = (index) => {
         this.props.selectChatFn(index);
     }
+    // Check for sender of latest msg
+    userIsSender = (chat) => chat.messages[chat.messages.length - 1].sender === this.props.userEmail;
 
 }
 

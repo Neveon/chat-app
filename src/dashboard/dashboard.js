@@ -40,7 +40,7 @@ class DashboardComponent extends React.Component {
                 }
                 {
                     this.state.selectedChat !== null && !this.state.newChatFormVisible ?
-                    <ChatTextBoxComponent submitMessageFn={this.submitMessage}></ChatTextBoxComponent>
+                    <ChatTextBoxComponent messageReadFn={this.messageRead} submitMessageFn={this.submitMessage}></ChatTextBoxComponent>
                     : null
                 }
                 <Button className={classes.signOutBtn} onClick={this.signOut}>Sign Out</Button>
@@ -72,9 +72,11 @@ class DashboardComponent extends React.Component {
         firebase.auth().signOut();
     }
 
-    selectChat = (chatIndex) => {
+    selectChat = async (chatIndex) => {
         console.log('index:', chatIndex);
-        this.setState({selectedChat: chatIndex});
+        await this.setState({selectedChat: chatIndex}); // Finishes before calling next function
+        this.messageRead();
+
     }
 
     newChatBtnClicked = () => {
@@ -83,6 +85,22 @@ class DashboardComponent extends React.Component {
             selectedChat: null
         });
     }
+
+    messageRead = () => {
+        const docKey = this.buildDocKey(this.state.chats[this.state.selectedChat].users.filter(_usr => _usr !== this.state.email)[0]);
+        if(this.clickedChatWhereNotSender(this.state.selectedChat)) {
+            firebase
+                .firestore()
+                .collection('chats')
+                .doc(docKey)
+                .update({ receiverHasRead: true })
+        } else {
+            console.log('Clicked message where the user was the sender');
+        }
+    }
+
+    // Notifications of messages for receiver, no notification for sender
+    clickedChatWhereNotSender = (chatIndex) => this.state.chats[chatIndex].messages[this.state.chats[chatIndex].messages.length - 1].sender !== this.state.email;
 
     // Called automatically whenever the component is successfully mounted to the dom
     componentDidMount = () => {
